@@ -42,12 +42,12 @@ public class EggCapture implements Listener {
 
     public EggCapture(Main main) {
 
+        key = new NamespacedKey(main, "eggCapture");
         worldBlackList = new HashSet<>(Configuration.Mob.EggCapture.blackList.world);
         entityBlackList = EntityUtil.entityToSet(Configuration.Mob.EggCapture.blackList.entity);
         spawnReasonBlackList = EntityUtil.spawnReasonToSet(Configuration.Mob.EggCapture.blackList.spawnReason);
 
         try {
-            key = new NamespacedKey(main, "eggCapture");
             maxChance = Configuration.Mob.EggCapture.chance.max;
             actionbar = Configuration.Mob.eggCapture.actionbar.replace("{mob}", "<mob>");
             actionbarEnabled = !actionbar.isEmpty();
