@@ -1,0 +1,10 @@
+name: GloomTweak
+version: '1.0'
+main: cn.gloomTweak.Main
+api-version: '1.21'
+commands:
+  gloomtweak:
+    description: Main command.
+    aliases:
+      - gt
+    usage: /<command>
