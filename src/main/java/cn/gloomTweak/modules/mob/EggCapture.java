@@ -2,6 +2,7 @@ package cn.gloomTweak.modules.mob;
 
 import cn.gloomTweak.Configuration;
 import cn.gloomTweak.Main;
+import cn.gloomTweak.utils.DataUtil;
 import cn.gloomTweak.utils.EntityUtil;
 import cn.gloomTweak.utils.XLogger;
 import net.kyori.adventure.text.Component;
@@ -37,7 +38,7 @@ public class EggCapture implements Listener {
     private double maxChance;
     private boolean actionbarEnabled;
     private String actionbar;
-    private CompiledExpression eggCaptureExpression;
+    private final CompiledExpression eggCaptureExpression;
 
 
     public EggCapture(Main main) {
@@ -54,16 +55,7 @@ public class EggCapture implements Listener {
         } catch (Exception e) {
             XLogger.err("Failed to load EggCapture: %s", e);
         }
-
-        try {
-            String expression = Configuration.Mob.EggCapture.chance.formula.replace(" ", "").replaceAll("\\{([^}]*)}", "$1");
-            EvaluationEnvironment eggCaptureEnv = new EvaluationEnvironment();
-            eggCaptureEnv.setVariableNames("max_health", "health");
-            eggCaptureExpression = Crunch.compileExpression(expression, eggCaptureEnv);
-            eggCaptureExpression.evaluate(1, 1);
-        } catch (Exception e) {
-            XLogger.err("Failed to parse EggCapture expression: %s", e);
-        }
+        eggCaptureExpression = DataUtil.buildExpression(Configuration.Mob.EggCapture.chance.formula,"max_health", "health");
 
         XLogger.info("EggCapture has been loaded.");
 
