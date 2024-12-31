@@ -10,6 +10,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
@@ -21,8 +22,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import redempt.crunch.CompiledExpression;
-import redempt.crunch.Crunch;
-import redempt.crunch.functional.EvaluationEnvironment;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -35,10 +34,12 @@ public class EggCapture implements Listener {
     private final Set<EntityType> entityBlackList;
     private final Set<String> worldBlackList;
     private final Set<CreatureSpawnEvent.SpawnReason> spawnReasonBlackList;
+    private final CompiledExpression eggCaptureExpression;
     private double maxChance;
     private boolean actionbarEnabled;
     private String actionbar;
-    private final CompiledExpression eggCaptureExpression;
+    private boolean particleEnabled;
+    private Particle particle;
 
 
     public EggCapture(Main main) {
@@ -52,10 +53,13 @@ public class EggCapture implements Listener {
             maxChance = Configuration.Mob.EggCapture.chance.max;
             actionbar = Configuration.Mob.eggCapture.actionbar.replace("{mob}", "<mob>");
             actionbarEnabled = !actionbar.isEmpty();
+            particle = Particle.valueOf(Configuration.Mob.EggCapture.particle.type);
+            particleEnabled = !particle.name().isEmpty();
+
         } catch (Exception e) {
             XLogger.err("Failed to load EggCapture: %s", e);
         }
-        eggCaptureExpression = DataUtil.buildExpression(Configuration.Mob.EggCapture.chance.formula,"max_health", "health");
+        eggCaptureExpression = DataUtil.buildExpression(Configuration.Mob.EggCapture.chance.formula, "max_health", "health");
 
         XLogger.info("EggCapture has been loaded.");
 

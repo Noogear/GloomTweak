@@ -50,6 +50,12 @@ public class Configuration extends ConfigurationFile {
             }
         }
 
+        @Comment({"死亡惩罚", "死亡不掉落打开后, 玩家是否不惧死亡", "该功能给予一定的惩罚防止玩家动不动死亡"})
+        public static DeathPenalty deathPenalty = new DeathPenalty();
+        public static class DeathPenalty extends ConfigurationPart {
+
+        }
+
     }
 
     @Comment("生物模块")
@@ -75,6 +81,17 @@ public class Configuration extends ConfigurationFile {
                 public double max = 8;
             }
 
+            @Comment("捕获成功产生的粒子特效")
+            public static Particle particle = new Particle();
+            public static class Particle extends ConfigurationPart {
+
+                @Comment("类型, 留空禁用")
+                public String type = "ELECTRIC_SPARK";
+
+                @Comment("数量")
+                public int count = 60;
+            }
+
             @Comment({"捕捉成功给玩家的提示", "只支持minimessage颜色格式", "可用变量: {mob}生物名称"})
             public String actionbar = "<white>成功捕捉<yellow> {mob} </yellow>!";
 
@@ -93,6 +110,7 @@ public class Configuration extends ConfigurationFile {
 
             }
         }
+
     }
 
 }
