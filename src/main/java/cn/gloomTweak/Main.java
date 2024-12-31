@@ -1,15 +1,15 @@
 package cn.gloomTweak;
 
-import cn.gloomTweak.managers.ConfigManager;
+import cn.gloomTweak.managers.FileManager;
 import cn.gloomTweak.managers.ModulesManager;
-import cn.gloomTweak.utils.Message;
+import cn.gloomTweak.utils.ModuleUtil;
 import cn.gloomTweak.utils.Scheduler;
 import cn.gloomTweak.utils.XLogger;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
-    public ConfigManager configManager;
+    public FileManager fileManager;
     public ModulesManager modulesManager;
     private boolean folia;
 
@@ -25,7 +25,9 @@ public final class Main extends JavaPlugin {
             folia = false;
         }
 
-        configManager = new ConfigManager(this);
+        fileManager = new FileManager(this);
+        new Scheduler(this);
+        new ModuleUtil(this);
         modulesManager = new ModulesManager(this);
         PluginCommand mainCommand = getCommand("gloomtweak");
         if (mainCommand != null) {
@@ -33,7 +35,7 @@ public final class Main extends JavaPlugin {
         } else {
             XLogger.err("Failed to load command.");
         }
-        new Scheduler(this);
+
 
         long elapsedTime = System.currentTimeMillis() - startTime;
         XLogger.info("Plugin loaded successfully in " + elapsedTime + " ms");
@@ -49,7 +51,7 @@ public final class Main extends JavaPlugin {
     }
 
     public void reload(){
-        configManager.load();
+        fileManager.load();
         modulesManager.reload();
     }
 }

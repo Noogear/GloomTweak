@@ -28,6 +28,7 @@ public class ConfigurationManager {
         }
         YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
         readConfigurationFile(yaml, clazz, null);
+        yaml.save(file);
     }
 
     /**
@@ -78,14 +79,14 @@ public class ConfigurationManager {
             }
             // if field is extending ConfigurationPart, recursively write the content
             if (ConfigurationPart.class.isAssignableFrom(field.getType())) {
-                XLogger.info("%s is a ConfigurationPart.", field.getName());
+                XLogger.info("ConfigurationPart %s loaded.", field.getName());
                 writeConfigurationPart(yaml, (ConfigurationPart) field.get(null), key);
             } else {
                 XLogger.info("Writing %s to %s.", field.getName(), key);
                 yaml.set(key, field.get(null));
             }
-            if (field.isAnnotationPresent(Comment.class)) {
-                yaml.setComments(key, List.of(field.getAnnotation(Comment.class).value()));
+            if (field.isAnnotationPresent(Comments.class)) {
+                setComments(yaml, key, field);
             }
         }
     }
@@ -99,8 +100,8 @@ public class ConfigurationManager {
             } else {
                 yaml.set(newKey, field.get(obj));
             }
-            if (field.isAnnotationPresent(Comment.class)) {
-                yaml.setComments(newKey, List.of(field.getAnnotation(Comment.class).value()));
+            if (field.isAnnotationPresent(Comments.class)) {
+                setComments(yaml, newKey, field);
             }
         }
     }
@@ -120,7 +121,10 @@ public class ConfigurationManager {
                 key = prefix + "." + key;
             }
             if (!yaml.contains(key)) {
-                XLogger.warn("Can't find %s from %s.", field.getName(), key);
+                yaml.set(key, field.get(null));
+                if (field.isAnnotationPresent(Comments.class)) {
+                    setComments(yaml, key, field);
+                }
                 continue;
             }
             if (ConfigurationPart.class.isAssignableFrom(field.getType())) {
@@ -136,7 +140,10 @@ public class ConfigurationManager {
             field.setAccessible(true);
             String newKey = key + "." + camelToKebab(field.getName());
             if (!yaml.contains(newKey)) {
-                XLogger.warn("Can't find %s from %s.", field.getName(), key);
+                yaml.set(newKey, field.get(obj));
+                if (field.isAnnotationPresent(Comments.class)) {
+                    setComments(yaml, newKey, field);
+                }
                 continue;
             }
             if (ConfigurationPart.class.isAssignableFrom(field.getType())) {
@@ -155,6 +162,10 @@ public class ConfigurationManager {
      */
     private static String camelToKebab(String camel) {
         return camel.replaceAll("([a-z])([A-Z]+)", "$1-$2").toLowerCase();
+    }
+
+    private static void setComments(YamlConfiguration yaml, String key, Field field) {
+        yaml.setComments(key, List.of(field.getAnnotation(Comments.class).value()));
     }
 
 }
