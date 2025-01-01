@@ -35,8 +35,7 @@ public final class Main extends JavaPlugin {
         } else {
             XLogger.err("Failed to load command.");
         }
-
-
+        
         long elapsedTime = System.currentTimeMillis() - startTime;
         XLogger.info("Plugin loaded successfully in " + elapsedTime + " ms");
     }

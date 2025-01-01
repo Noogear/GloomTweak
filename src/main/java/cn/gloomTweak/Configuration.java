@@ -116,7 +116,7 @@ public class Configuration extends ConfigurationFile {
                     public String type = "TOTEM_OF_UNDYING";
 
                     @Comments("数量")
-                    public int count = 35;
+                    public int count = 50;
                 }
 
             }
