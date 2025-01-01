@@ -1,9 +1,13 @@
 package cn.gloomTweak.utils;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +39,21 @@ public class MaterialUtil {
                         return Material.valueOf(s);
                     } catch (IllegalArgumentException e) {
                         XLogger.warn(s + " is not a valid material type.");
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
+    public static Set<PotionEffectType> potionToSet(List<String> potions){
+        return potions.stream()
+                .map(String::toLowerCase)
+                .map(s->{
+                    try {
+                        return Registry.POTION_EFFECT_TYPE.get(NamespacedKey.fromString(s));
+                    } catch (IllegalArgumentException e) {
+                        XLogger.warn(s + " is not a valid potion type.");
                         return null;
                     }
                 })

@@ -66,6 +66,7 @@ public class ConfigurationManager {
     public static void save(Class<? extends ConfigurationFile> clazz, File file) throws Exception {
         createIfNotExist(file);
         YamlConfiguration yaml = new YamlConfiguration();
+        yaml.options().width(250);
         writeConfigurationFile(yaml, clazz, null);
         yaml.save(file);
     }

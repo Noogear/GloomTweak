@@ -13,7 +13,7 @@ import java.util.List;
 public class Configuration extends ConfigurationFile {
 
     @Comments("版本号")
-    public static int version = 1;
+    public static int version = 2;
 
     @Comments("总开关")
     public static boolean enabled = true;
@@ -53,7 +53,72 @@ public class Configuration extends ConfigurationFile {
         @Comments({"死亡惩罚", "死亡不掉落打开后, 让玩家依旧畏惧死亡", "该功能给予一定的惩罚防止玩家动不动死亡"})
         public static DeathPenalty deathPenalty = new DeathPenalty();
         public static class DeathPenalty extends ConfigurationPart {
+            @Comments("功能开关")
+            public boolean enabled = true;
 
+            @Comments({"惩罚等级", "每次死亡会累加惩罚等级"})
+            public static Level level = new Level();
+            public static class Level extends ConfigurationPart {
+
+                @Comments({"最大惩罚等级","玩家获得最大惩罚等级后会清空"})
+                public int maxLevel = 5;
+                @Comments({"惩罚等级有效时间", "单位为分钟"})
+                public int effectiveTime = 10;
+
+                public static LevelPenalty levelPenalty = new LevelPenalty();
+                public static class LevelPenalty extends ConfigurationPart {
+
+                    @Comments({"扣除的经验", "可用变量: {exp}玩家当前经验, {degree}比例, {level}惩罚等级"})
+                    public String exp = "{exp} * {degree} * {level} * 0.01";
+
+                    @Comments("比例，配合上方公式使用")
+                    public String degree = "0.4-1.4";
+
+                    @Comments("当惩罚等级有效时间内到达最大惩罚等级获得的惩罚")
+                    public static MaxLevelPenalty maxLevelPenalty = new MaxLevelPenalty();
+                    public static class MaxLevelPenalty extends ConfigurationPart {
+
+                        @Comments("给予的药水效果")
+                        public List<String> potion = Arrays.asList("BLINDNESS", "NAUSEA");
+                        @Comments("药水持续时间")
+                        public int potionTime = 30;
+
+                        @Comments("复活提示, 会覆盖复活提示")
+                        public String title = "<red>重生</red>";
+                        @Comments({"复活副标题","可用变量: {exptext}经验文本, {text}随机文本"})
+                        public String subTitle = "{exptext}<gray>{text}<gray>";
+                        @Comments({"经验文本, 配合上方使用, 扣除经验为空时自动隐藏", "可用变量: {exp}扣除的经验"})
+                        public String expText = "<aqua>-{exp}</aqua> <white>EXP</white> ";
+                        @Comments("随机文本, 配合上方使用")
+                        public List<String> text = Arrays.asList("视生命如草芥, 该罚!", "求求你不要再屎啦~", "我去, 上瘾了是吧?");
+                    }
+                }
+            }
+
+            public static Respawn respawn = new Respawn();
+            public static class Respawn extends ConfigurationPart {
+                @Comments("复活提示")
+                public String title = "<white>重生</white>";
+                @Comments({"复活副标题", "可用变量: {exptext}经验文本"})
+                public String subTitle = "{exptext}";
+                @Comments({"经验文本, 配合上方使用, 扣除经验为空时自动隐藏", "可用变量: {exp}扣除的经验"})
+                public String expText = "<aqua>-{exp}</aqua> <white>EXP</white>";
+
+                @Comments({"玩家复活后执行的指令", "配合其他插件使用效果更好"})
+                public String command = "ctdeathmsg";
+
+                @Comments("复活产生的粒子特效")
+                public static Particle particle = new Particle();
+                public static class Particle extends ConfigurationPart {
+
+                    @Comments("类型, 留空禁用")
+                    public String type = "TOTEM_OF_UNDYING";
+
+                    @Comments("数量")
+                    public int count = 35;
+                }
+
+            }
         }
 
     }

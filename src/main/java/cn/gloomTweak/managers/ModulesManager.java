@@ -5,6 +5,7 @@ import cn.gloomTweak.Main;
 import cn.gloomTweak.modules.mob.EggCapture.DecreaseEggHatching;
 import cn.gloomTweak.modules.mob.EggCapture.EggCapture;
 import cn.gloomTweak.modules.mob.EggCapture.EggToFeather;
+import cn.gloomTweak.modules.player.DeathPenalty;
 import cn.gloomTweak.modules.player.EasyLift;
 import cn.gloomTweak.modules.player.HealthScaled;
 import org.bukkit.event.HandlerList;
@@ -47,18 +48,25 @@ public class ModulesManager {
             pluginManager.registerEvents(new EasyLift(), plugin);
         }
 
+        if(Configuration.Player.deathPenalty.enabled){
+            pluginManager.registerEvents(new DeathPenalty(), plugin);
+        }
+
     }
 
     private void registerMobModule() {
         if(Configuration.Mob.eggCapture.enabled){
             pluginManager.registerEvents(new EggCapture(), plugin);
+
             if(Configuration.Mob.EggCapture.balance.decreaseEggHatching){
                 pluginManager.registerEvents(new DecreaseEggHatching(), plugin);
             }
+
             if(Configuration.Mob.EggCapture.balance.eggToFeather>=0){
                 pluginManager.registerEvents(new EggToFeather(), plugin);
             }
         }
+
     }
 
 }

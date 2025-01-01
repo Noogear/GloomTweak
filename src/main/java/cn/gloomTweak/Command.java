@@ -38,7 +38,6 @@ public class Command implements CommandExecutor, TabCompleter {
         switch (args[0].toLowerCase()) {
             case "reload":
                 long startTime = System.currentTimeMillis();
-                Message.sendMsg(sender, "插件重启中...");
                 plugin.reload();
                 long elapsedTime = System.currentTimeMillis() - startTime;
                 Message.sendMsg(sender, "重启完成，耗时 " + elapsedTime + " ms");
