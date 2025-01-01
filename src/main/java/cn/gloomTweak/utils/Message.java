@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Message {
 
@@ -33,7 +35,19 @@ public class Message {
             msg.deleteCharAt(length - 1);
         }
         return MiniMessage.miniMessage().deserialize(msg.toString());
+    }
 
+    public static List<Component> buildComponentList(List<String> messages) {
+        return messages.stream()
+                .map(s->{
+                    try {
+                        return MiniMessage.miniMessage().deserialize(s);
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     public static void sendMsg(CommandSender sender, Component message) {

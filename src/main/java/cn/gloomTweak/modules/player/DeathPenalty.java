@@ -30,8 +30,8 @@ public class DeathPenalty implements Listener {
     private Component titlePenalty;
     private String subTitlePenalty;
     private String expTextPenalty;
-    private List<String> text;
-    private Component titleRespawn;
+    private List<String> subTextPenalty;
+    private List<Component> titleRespawn;
     private String subTitleRespawn;
     private String expTextRespawn;
     private boolean particleEnabled;
@@ -45,11 +45,11 @@ public class DeathPenalty implements Listener {
             expDegree = Degree.build(Configuration.Player.DeathPenalty.Level.levelPenalty.degree);
             potionTypes = new HashSet<>(MaterialUtil.potionToSet(Configuration.Player.DeathPenalty.Level.LevelPenalty.maxLevelPenalty.potion));
             potionTime = Configuration.Player.DeathPenalty.Level.LevelPenalty.maxLevelPenalty.potionTime * 20;
-            titlePenalty = MiniMessage.miniMessage().deserialize(Configuration.Player.DeathPenalty.Level.LevelPenalty.maxLevelPenalty.title);
+            titlePenalty = MiniMessage.miniMessage().deserialize(Configuration.Player.DeathPenalty.Level.LevelPenalty.maxLevelPenalty.mainTitle);
             subTitlePenalty = Configuration.Player.DeathPenalty.Level.LevelPenalty.maxLevelPenalty.subTitle.replace("{exptext}", "<exptext>").replace("{text}", "<text>");
-            expTextPenalty = Configuration.Player.DeathPenalty.Level.LevelPenalty.maxLevelPenalty.expText.replace("{exp}", "<exp>");
-            text = Configuration.Player.DeathPenalty.Level.LevelPenalty.maxLevelPenalty.text;
-            titleRespawn = MiniMessage.miniMessage().deserialize(Configuration.Player.DeathPenalty.respawn.title);
+            expTextPenalty = Configuration.Player.DeathPenalty.Level.LevelPenalty.maxLevelPenalty.subExpText.replace("{exp}", "<exp>");
+            subTextPenalty = Configuration.Player.DeathPenalty.Level.LevelPenalty.maxLevelPenalty.subText;
+            titleRespawn = Message.buildComponentList(Configuration.Player.DeathPenalty.respawn.mainTitle);
             subTitleRespawn = Configuration.Player.DeathPenalty.respawn.subTitle.replace("{exptext}", "<exptext>");
             expTextRespawn = Configuration.Player.DeathPenalty.respawn.expText.replace("{exp}", "<exp>");
             particle = Particle.valueOf(Configuration.Player.DeathPenalty.Respawn.particle.type.toUpperCase(Locale.ROOT));
@@ -115,7 +115,7 @@ public class DeathPenalty implements Listener {
                 Component subtitle = MiniMessage.miniMessage().deserialize(
                         subTitlePenalty,
                         Placeholder.parsed("exptext", exptext),
-                        Placeholder.parsed("text", text.get(ThreadLocalRandom.current().nextInt(text.size()))),
+                        Placeholder.parsed("text", subTextPenalty.get(ThreadLocalRandom.current().nextInt(subTextPenalty.size()))),
                         Placeholder.parsed("exp", String.valueOf(deduction)));
                 Title title = Title.title(titlePenalty, subtitle);
                 player.showTitle(title);
@@ -132,7 +132,7 @@ public class DeathPenalty implements Listener {
                     subTitleRespawn,
                     Placeholder.parsed("exptext", exptext),
                     Placeholder.parsed("exp", String.valueOf(deduction)));
-            Title title = Title.title(titleRespawn, subtitle);
+            Title title = Title.title(titleRespawn.get(ThreadLocalRandom.current().nextInt(titleRespawn.size())), subtitle);
             player.showTitle(title);
         }, 1);
 
