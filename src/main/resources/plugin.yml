@@ -1,5 +1,5 @@
 name: GloomTweak
-version: '1.0'
+version: '1.0.1'
 main: cn.gloomTweak.Main
 api-version: '1.21'
 folia-supported: true
@@ -9,3 +9,11 @@ commands:
     aliases:
       - gt
     usage: /<command>
+
+permissions:
+  gloomtweak.reload:
+    description: Allow the player to reload the plugin.
+    default: op
+  gloomtweak.help:
+    description: Allow the player to get the help.
+    default: true
