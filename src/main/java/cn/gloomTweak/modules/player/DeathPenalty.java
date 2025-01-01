@@ -65,11 +65,15 @@ public class DeathPenalty implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getPlayer();
-        UUID playerId = player.getUniqueId();
-        long currentTime = System.currentTimeMillis();
+        UUID playerId = event.getPlayer().getUniqueId();
+        long time = System.currentTimeMillis();
         List<Long> deaths = recentDeaths.getOrDefault(playerId, new ArrayList<>());
-        deaths.add(currentTime);
+
+        if (time - deaths.getFirst() > TimeUnit.MINUTES.toMillis(Configuration.Player.DeathPenalty.level.effectiveTime)) {
+            deaths.clear();
+        }
+
+        deaths.add(time);
         recentDeaths.put(playerId, deaths);
     }
 
@@ -79,7 +83,7 @@ public class DeathPenalty implements Listener {
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();
         List<Long> deaths = recentDeaths.getOrDefault(playerId, new ArrayList<>());
-        long time = System.currentTimeMillis();
+
         int exp = PlayerUtil.getTotalExperience(player);
         int level = deaths.size();
         int deduction = (int) (expExpression.evaluate(exp, expDegree.getRandom(), level));
@@ -93,10 +97,6 @@ public class DeathPenalty implements Listener {
             Scheduler.runTaskLater(() -> {
                 player.spawnParticle(particle, player.getEyeLocation(), particleCount);
             }, 5);
-        }
-
-        if (deaths.getFirst() - time > TimeUnit.MINUTES.toMillis(Configuration.Player.DeathPenalty.level.effectiveTime)) {
-            deaths.clear();
         }
 
         if (deaths.size() >= Configuration.Player.DeathPenalty.level.maxLevel) {
