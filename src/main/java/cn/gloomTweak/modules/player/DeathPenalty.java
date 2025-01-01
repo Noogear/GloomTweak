@@ -69,8 +69,10 @@ public class DeathPenalty implements Listener {
         long time = System.currentTimeMillis();
         List<Long> deaths = recentDeaths.getOrDefault(playerId, new ArrayList<>());
 
-        if (time - deaths.getFirst() > TimeUnit.MINUTES.toMillis(Configuration.Player.DeathPenalty.level.effectiveTime)) {
-            deaths.clear();
+        if (!deaths.isEmpty()) {
+            if (time - deaths.getFirst() > TimeUnit.MINUTES.toMillis(Configuration.Player.DeathPenalty.level.effectiveTime)) {
+                deaths.clear();
+            }
         }
 
         deaths.add(time);
