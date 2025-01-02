@@ -74,7 +74,7 @@ public class Configuration extends ConfigurationFile {
                     @Comments({"扣除的经验", "可用变量: {exp}玩家当前经验, {degree}比例, {level}惩罚等级"})
                     public String exp = "{exp} * {degree} * {level} * 0.01";
                     @Comments("比例，配合上方公式使用")
-                    public String degree = "0.4-1.4";
+                    public String degree = "0.5-1.5";
 
                     @Comments("当惩罚等级有效时间内到达最大惩罚等级获得的惩罚")
                     public static MaxLevelPenalty maxLevelPenalty = new MaxLevelPenalty();
@@ -100,7 +100,7 @@ public class Configuration extends ConfigurationFile {
             public static class Respawn extends ConfigurationPart {
 
                 @Comments("复活提示")
-                public List<String> mainTitle = Arrays.asList("夺舍成功!", "复活成功!", "你重生了...", "你转生了...", "秽土转生之术", "外道轮回天生之术", "双鱼佩复活次数 -1", "提瓦特煎蛋 -1");
+                public List<String> mainTitle = Arrays.asList("夺舍成功!", "复活成功!", "你重生了...", "你转生了...", "秽土转生之术", "外道轮回天生之术", "双鱼佩复活次数 -1", "提瓦特煎蛋 -1", "黄粱一梦");
                 @Comments({"复活副标题", "可用变量: {exptext}经验文本"})
                 public String subTitle = "{exptext}";
                 @Comments({"经验文本, 配合上方使用, 扣除经验为空时自动隐藏", "可用变量: {exp}扣除的经验"})
