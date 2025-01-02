@@ -143,6 +143,8 @@ public class Configuration extends ConfigurationFile {
             public static Balance balance = new Balance();
             @Comments({"捕捉成功给玩家的提示", "只支持minimessage颜色格式", "可用变量: {mob}生物名称"})
             public String actionbar = "<white>成功捕捉<yellow> {mob} </yellow>!";
+            @Comments("有名称的生物蛋生成的生物是否和命名生物一样不会消失")
+            public Boolean nameSpawnerEggFix = true;
             @Comments("黑名单")
             public static BlackList blackList = new BlackList();
 
