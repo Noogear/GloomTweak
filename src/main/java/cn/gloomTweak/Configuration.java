@@ -43,7 +43,7 @@ public class Configuration extends ConfigurationFile {
             @Comments({"电梯上升提示, 留空以禁止"})
             public String upActionbar = "<gradient:#2db95a:#1dd157><b>⬆ <dark_gray>┃</dark_gray> UP</b></gradient>";
             @Comments({"电梯下降音效, 留空以禁止"})
-            public String downSound = "BLOCK_PISTON_EXTEND";
+            public String downSound = "BLOCK_PISTON_CONTRACT";
             @Comments({"电梯下架提示, 留空以禁止"})
             public String downActionbar = "<gradient:#e32510:#ff9439><b>⬇ <dark_gray>┃</dark_gray> DOWN</b></gradient>";
             @Comments("黑名单")
