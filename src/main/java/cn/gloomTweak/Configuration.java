@@ -38,8 +38,14 @@ public class Configuration extends ConfigurationFile {
             public boolean enabled = true;
             @Comments({"电梯方块", "默认为阳光探测器"})
             public List<String> block = List.of("DAYLIGHT_DETECTOR");
-            @Comments({"电梯音效, 留空以禁止"})
-            public String sound = "BLOCK_PISTON_EXTEND";
+            @Comments({"电梯上升音效, 留空以禁止"})
+            public String upSound = "BLOCK_PISTON_EXTEND";
+            @Comments({"电梯上升提示, 留空以禁止"})
+            public String upActionbar = "<gradient:#2db95a:#1dd157><b>⬆ <dark_gray>┃</dark_gray> UP</b></gradient>";
+            @Comments({"电梯下降音效, 留空以禁止"})
+            public String downSound = "BLOCK_PISTON_EXTEND";
+            @Comments({"电梯下架提示, 留空以禁止"})
+            public String downActionbar = "<gradient:#e32510:#ff9439><b>⬇ <dark_gray>┃</dark_gray> DOWN</b></gradient>";
             @Comments("黑名单")
             public static BlackList blackList = new BlackList();
 

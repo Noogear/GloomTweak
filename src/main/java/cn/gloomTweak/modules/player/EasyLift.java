@@ -5,6 +5,8 @@ import cn.gloomTweak.utils.MaterialUtil;
 import cn.gloomTweak.utils.XLogger;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import io.papermc.paper.entity.TeleportFlag;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -19,22 +21,36 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class EasyLift implements Listener {
-    private Sound liftSound;
-    private boolean soundEnabled = true;
-    private Set<Material> liftBlock;
-    private Set<String> worldBlackList;
+    private final Set<Material> liftBlock;
+    private final Set<String> worldBlackList;
+    private Sound upSound;
+    private boolean upSoundEnabled;
+    private Component upActionbar;
+    private boolean upActionbarEnabled;
+    private Sound downSound;
+    private boolean downSoundEnabled;
+    private Component downActionbar;
+    private boolean downActionbarEnabled;
 
     public EasyLift() {
 
+
         try {
-            String sound = Configuration.Player.easyLift.sound;
-            if (sound.isEmpty()) {
-                soundEnabled = false;
-                return;
-            }
-            liftSound = Sound.valueOf(sound.toUpperCase());
+            upSoundEnabled = !Configuration.Player.easyLift.upSound.isEmpty();
+            upSound = Sound.valueOf(Configuration.Player.easyLift.upSound.toUpperCase());
+            downSoundEnabled = !Configuration.Player.easyLift.downSound.isEmpty();
+            downSound = Sound.valueOf(Configuration.Player.easyLift.downSound.toUpperCase());
         } catch (Exception e) {
             XLogger.err("EasyLift failed to load sound: %s" + e);
+        }
+
+        try {
+            upActionbarEnabled = !Configuration.Player.easyLift.upActionbar.isEmpty();
+            upActionbar = MiniMessage.miniMessage().deserialize(Configuration.Player.easyLift.upActionbar);
+            downActionbarEnabled = !Configuration.Player.easyLift.downActionbar.isEmpty();
+            downActionbar = MiniMessage.miniMessage().deserialize(Configuration.Player.easyLift.downActionbar);
+        } catch (Exception e) {
+            XLogger.err("EasyLift failed to load actionbar: %s" + e);
         }
 
         liftBlock = MaterialUtil.materialToSet(Configuration.Player.easyLift.block);
@@ -95,8 +111,22 @@ public class EasyLift implements Listener {
         found.setYaw(loc.getYaw());
         found.setPitch(loc.getPitch());
         player.teleport(found.add(0.5, 1.0, 0.5), TeleportFlag.EntityState.RETAIN_VEHICLE, TeleportFlag.EntityState.RETAIN_PASSENGERS);
-        if (soundEnabled) {
-            player.playSound(found, liftSound, 10, 1);
+
+        if (up) {
+            if (upSoundEnabled) {
+                player.playSound(found, upSound, 10, 1);
+            }
+            if (upActionbarEnabled) {
+                player.sendActionBar(upActionbar);
+            }
+        } else {
+            if (downSoundEnabled) {
+                player.playSound(found, downSound, 10, 1);
+            }
+            if (downActionbarEnabled) {
+                player.sendActionBar(downActionbar);
+            }
         }
+
     }
 }
