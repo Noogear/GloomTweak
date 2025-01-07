@@ -187,7 +187,7 @@ public class Configuration extends ConfigurationFile {
                 public List<String> world = new ArrayList<>();
 
                 @Comments({"禁止捕捉的生物", "https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html"})
-                public List<String> entity = Arrays.asList("ENDER_DRAGON", "WARDEN", "ELDER_GUARDIAN", "WITHER", "IRON_GOLEM", "SNOW_GOLEM");
+                public List<String> entity = Arrays.asList("ENDER_DRAGON", "WARDEN", "ELDER_GUARDIAN", "WITHER", "IRON_GOLEM", "SNOW_GOLEM", "GIANT");
 
                 @Comments({"该原因生成的生物禁止被捕捉", "SPAWNER_EGG 可以防止玩家多次捕捉同一个生物"})
                 public List<String> spawnReason = List.of("SPAWNER_EGG");
