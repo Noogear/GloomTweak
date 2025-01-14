@@ -2,8 +2,11 @@ package cn.gloomTweak;
 
 import cn.gloomTweak.managers.FileManager;
 import cn.gloomTweak.managers.ModulesManager;
+import cn.gloomTweak.utils.Message;
 import cn.gloomTweak.utils.ModuleUtil;
-import cn.gloomTweak.utils.Scheduler;
+import cn.gloomTweak.utils.SchedulerUtil.CommonScheduler;
+import cn.gloomTweak.utils.SchedulerUtil.FoliaScheduler;
+import cn.gloomTweak.utils.SchedulerUtil.SchedulerInterface;
 import cn.gloomTweak.utils.XLogger;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,7 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Main extends JavaPlugin {
     public FileManager fileManager;
     public ModulesManager modulesManager;
-    private boolean folia;
+    private SchedulerInterface schedulerInterface;
 
     @Override
     public void onEnable() {
@@ -20,15 +23,15 @@ public final class Main extends JavaPlugin {
         new XLogger(this);
         try {
             Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
-            folia = true;
+            schedulerInterface = new FoliaScheduler(this);
         } catch (ClassNotFoundException e) {
-            folia = false;
+            schedulerInterface = new CommonScheduler(this);
         }
 
         fileManager = new FileManager(this);
-        new Scheduler(this);
         new ModuleUtil(this);
         modulesManager = new ModulesManager(this);
+        new Message(this);
         PluginCommand mainCommand = getCommand("gloomtweak");
         if (mainCommand != null) {
             mainCommand.setExecutor(new Command(this));
@@ -42,11 +45,11 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Scheduler.cancelAll();
+        schedulerInterface.cancelAll();
     }
 
-    public boolean isFolia() {
-        return folia;
+    public SchedulerInterface getSchedule(){
+        return schedulerInterface;
     }
 
     public void reload(){

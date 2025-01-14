@@ -5,13 +5,11 @@ import org.bukkit.NamespacedKey;
 
 public class ModuleUtil {
     public static ModuleUtil instance;
-    private final Main plugin;
     private final NamespacedKey eggCapture;
 
     public ModuleUtil(Main main) {
         instance = this;
-        plugin = main;
-        this.eggCapture = new NamespacedKey(plugin, "eggCapture");;
+        this.eggCapture = new NamespacedKey(main, "eggCapture");;
     }
 
     public static NamespacedKey getEggCapture() {

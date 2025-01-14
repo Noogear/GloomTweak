@@ -50,7 +50,7 @@ public class ModulesManager {
         }
 
         if (Configuration.Player.deathPenalty.enabled) {
-            pluginManager.registerEvents(new DeathPenalty(), plugin);
+            pluginManager.registerEvents(new DeathPenalty(plugin), plugin);
         }
 
     }

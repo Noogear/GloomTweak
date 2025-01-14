@@ -1,5 +1,7 @@
 package cn.gloomTweak.utils;
 
+import cn.gloomTweak.Main;
+import cn.gloomTweak.utils.SchedulerUtil.SchedulerInterface;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
@@ -12,9 +14,11 @@ import java.util.stream.Collectors;
 public class Message {
 
     public static Message instance;
+    private final SchedulerInterface scheduler;
 
-    public Message() {
+    public Message(Main main) {
         instance = this;
+        scheduler = main.getSchedule();
         load();
     }
 
@@ -55,14 +59,14 @@ public class Message {
     }
 
     public static void sendMsg(CommandSender sender, String message) {
-        Scheduler.runTaskAsync(()->{
+        instance.scheduler.runTaskAsync(()->{
             sender.sendMessage(buildMsg(message));
         });
 
     }
 
     public static void sendMsg(CommandSender sender, String message, Object... args) {
-        Scheduler.runTaskAsync(()->{
+        instance.scheduler.runTaskAsync(()->{
             sender.sendMessage(buildMsg(String.format(message, args)));
         });
 

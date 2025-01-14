@@ -8,8 +8,6 @@ import java.util.Arrays;
 
 public class ExpressionUtil {
 
-
-
     public static CompiledExpression build(String expression, String... variables) {
         try {
             EvaluationEnvironment env = new EvaluationEnvironment();

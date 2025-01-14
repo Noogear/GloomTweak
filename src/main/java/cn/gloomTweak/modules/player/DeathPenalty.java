@@ -1,7 +1,9 @@
 package cn.gloomTweak.modules.player;
 
 import cn.gloomTweak.Configuration;
+import cn.gloomTweak.Main;
 import cn.gloomTweak.utils.*;
+import cn.gloomTweak.utils.SchedulerUtil.SchedulerInterface;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -37,9 +39,11 @@ public class DeathPenalty implements Listener {
     private boolean particleEnabled;
     private Particle particle;
     private int particleCount;
+    private final SchedulerInterface scheduler;
 
-    public DeathPenalty() {
+    public DeathPenalty(Main main) {
 
+        this.scheduler = main.getSchedule();
         recentDeaths = new HashMap<>();
         try {
             expDegree = Degree.build(Configuration.Player.DeathPenalty.Level.levelPenalty.degree);
@@ -96,19 +100,19 @@ public class DeathPenalty implements Listener {
         player.performCommand(Configuration.Player.DeathPenalty.respawn.command);
 
         if (particleEnabled) {
-            Scheduler.runTaskLater(() -> {
+            scheduler.runTaskLater(() -> {
                 player.spawnParticle(particle, player.getEyeLocation(), particleCount);
             }, 5);
         }
 
         if (deaths.size() >= Configuration.Player.DeathPenalty.level.maxLevel) {
             recentDeaths.remove(playerId);
-            Scheduler.runTaskLater(() -> {
+            scheduler.runTaskLater(() -> {
                 for (PotionEffectType p : potionTypes) {
                     player.addPotionEffect(new PotionEffect(p, potionTime, 1));
                 }
             }, 1);
-            Scheduler.runTaskLaterAsync(() -> {
+            scheduler.runTaskLaterAsync(() -> {
                 String exptext = "";
                 if (deduction > 1) {
                     exptext = expTextPenalty;
@@ -125,7 +129,7 @@ public class DeathPenalty implements Listener {
             return;
         }
 
-        Scheduler.runTaskLaterAsync(() -> {
+        scheduler.runTaskLaterAsync(() -> {
             String exptext = "";
             if (deduction > 1) {
                 exptext = expTextRespawn;
