@@ -15,6 +15,13 @@ public class Degree {
         this.fixed = fixed;
     }
 
+    public double getRandom() {
+        if (fixed.length == 0) {
+            return ThreadLocalRandom.current().nextDouble(start, end);
+        }
+        return fixed[ThreadLocalRandom.current().nextInt(fixed.length)];
+    }
+
     public static Degree build(String value) {
         double start = 0;
         double end = 0;
@@ -23,18 +30,11 @@ public class Degree {
             String[] range = value.replaceAll(" ", "").split("-");
             if (range.length >= 2) {
                 start = Double.parseDouble(range[0]);
-                end = Double.parseDouble(range[range.length - 1] + 1);
+                end = Double.parseDouble(range[range.length - 1]);
             }
         } else {
             fixed = Arrays.stream(value.replaceAll(" ", "").split(",")).mapToDouble(Double::parseDouble).toArray();
         }
         return new Degree(start, end, fixed);
-    }
-
-    public double getRandom() {
-        if (fixed.length == 0) {
-            return ThreadLocalRandom.current().nextDouble(start, end);
-        }
-        return fixed[ThreadLocalRandom.current().nextInt(fixed.length)];
     }
 }
